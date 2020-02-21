@@ -1,0 +1,2 @@
+C:\Users\moham\Desktop\NP\Map_Reduce\Map_Reduce\bin\Debug\Map_Reduce.exe.config
+C:\Users\moham\Desktop\NP\MapReduce\Map_Reduce\bin\Debug\Map_Reduce.exe.config
