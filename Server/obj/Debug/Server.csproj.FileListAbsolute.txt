@@ -1,0 +1,8 @@
+C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Map_Reduce.MainForm.resources
+C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Map_Reduce.Properties.Resources.resources
+C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Server.csproj.GenerateResource.Cache
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\Map_Reduce.exe.config
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\Map_Reduce.exe
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\Map_Reduce.pdb
+C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Map_Reduce.exe
+C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Map_Reduce.pdb
