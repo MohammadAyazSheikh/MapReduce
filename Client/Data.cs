@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Map_Reduce
-{  
+namespace Client
+{
     class Data
     {
-        public string Name;      //Name by which the client logs into the room
-        public string Message;   //Message text
-        public Command cmd;  //Command type (login, logout, send message, etcetera)
+        public string strName;      //Name by which the client logs into the room
+        public string strMessage;   //Message text
+        public Command cmdCommand;  //Command type (login, logout, send message, etcetera)
+
         //Default constructor
         public Data()
         {
-            this.cmd = Command.Null;
-            this.Message = null;
-            this.Name = null;
+            this.cmdCommand = Command.Null;
+            this.strMessage = null;
+            this.strName = null;
         }
 
         //Converts the bytes into an object of type Data
@@ -26,11 +27,12 @@ namespace Map_Reduce
         }
 
 
+
         //Converts the bytes into an object of type Data
         void ConvertToObject(byte[] data)
         {
             //The first four bytes are for the Command
-            this.cmd = (Command)BitConverter.ToInt32(data, 0);
+            this.cmdCommand = (Command)BitConverter.ToInt32(data, 0);
 
             //The next four store the length of the name
             int nameLen = BitConverter.ToInt32(data, 4);
@@ -40,16 +42,17 @@ namespace Map_Reduce
 
             //This check makes sure that strName has been passed in the array of bytes
             if (nameLen > 0)
-                this.Name = Encoding.UTF8.GetString(data, 12, nameLen);
+                this.strName = Encoding.UTF8.GetString(data, 12, nameLen);
             else
-                this.Name = null;
+                this.strName = null;
 
             //This checks for a null message field
             if (msgLen > 0)
-                this.Message = Encoding.UTF8.GetString(data, 12 + nameLen, msgLen);
+                this.strMessage = Encoding.UTF8.GetString(data, 12 + nameLen, msgLen);
             else
-                this.Message = null;
+                this.strMessage = null;
         }
+
 
         //Converts the Data structure into an array of bytes
         public byte[] ConvertToByte()
@@ -57,29 +60,31 @@ namespace Map_Reduce
             List<byte> result = new List<byte>();
 
             //First four are for the Command
-            result.AddRange(BitConverter.GetBytes((int)cmd));
+            result.AddRange(BitConverter.GetBytes((int)cmdCommand));
 
             //Add the length of the name
-            if (Name != null)
-                result.AddRange(BitConverter.GetBytes(Name.Length));
+            if (strName != null)
+                result.AddRange(BitConverter.GetBytes(strName.Length));
             else
                 result.AddRange(BitConverter.GetBytes(0));
 
             //Length of the message
-            if (Message != null)
-                result.AddRange(BitConverter.GetBytes(Message.Length));
+            if (strMessage != null)
+                result.AddRange(BitConverter.GetBytes(strMessage.Length));
             else
                 result.AddRange(BitConverter.GetBytes(0));
 
             //Add the name
-            if (Name != null)
-                result.AddRange(Encoding.UTF8.GetBytes(Name));
+            if (strName != null)
+                result.AddRange(Encoding.UTF8.GetBytes(strName));
 
             //And, lastly we add the message text to our array of bytes
-            if (Message != null)
-                result.AddRange(Encoding.UTF8.GetBytes(Message));
+            if (strMessage != null)
+                result.AddRange(Encoding.UTF8.GetBytes(strMessage));
 
             return result.ToArray();
         }
+
+       
     }
 }

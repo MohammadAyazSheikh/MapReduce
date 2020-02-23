@@ -166,7 +166,7 @@ namespace Map_Reduce
                             msgToSend.Message += client.strName + "*";
                         }
 
-                        message = msgToSend.ToByte();
+                        message = msgToSend.ConvertToByte();
 
                         //Send the name of the users in the chat room
                         clientSocket.BeginSend(message, 0, message.Length, SocketFlags.None,
@@ -176,7 +176,7 @@ namespace Map_Reduce
 
                 if (msgToSend.cmd != Command.List)   //List messages are not broadcasted
                 {
-                    message = msgToSend.ToByte();
+                    message = msgToSend.ConvertToByte();
 
                     foreach (ClientInfo clientInfo in clientList)
                     {
