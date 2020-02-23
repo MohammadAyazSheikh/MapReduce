@@ -7,3 +7,4 @@ C:\Users\moham\Desktop\NP\MapReduce\Client\obj\Debug\Client.Properties.Resources
 C:\Users\moham\Desktop\NP\MapReduce\Client\obj\Debug\Client.csproj.GenerateResource.Cache
 C:\Users\moham\Desktop\NP\MapReduce\Client\obj\Debug\Client.exe
 C:\Users\moham\Desktop\NP\MapReduce\Client\obj\Debug\Client.pdb
+C:\Users\moham\Desktop\NP\MapReduce\Client\obj\Debug\Client.MainForm.resources
