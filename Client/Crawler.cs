@@ -16,6 +16,8 @@ namespace Client
 
         public List<Product> GetData_Ishopping(string Input)
         {
+            IList<IWebElement> desc_list;
+            IList<IWebElement> price_list;
             driver = new ChromeDriver();
             List<Product> info = new List<Product>();
             driver.Navigate().GoToUrl("https://www.ishopping.pk/");
@@ -25,27 +27,41 @@ namespace Client
             searchBtn.Click();
 
             Thread.Sleep(5000);
-            IList<IWebElement> desc_list = driver.FindElements(By.XPath("//div[@class= 'kuNameDesc']/div[@class ='kuName']"));
-            IList<IWebElement> price_list = driver.FindElements(By.XPath("//div[@class ='kuPrice']/div[@class = 'kuSalePrice']"));
-            if (desc_list.Count > 0 && price_list.Count > 0)
+            try
             {
-                for (int i = 0; i < desc_list.Count; i++)
+                desc_list = driver.FindElements(By.XPath("//div[@class= 'kuNameDesc']/div[@class ='kuName']"));
+                price_list = driver.FindElements(By.XPath("//div[@class ='kuPrice']/div[@class = 'kuSalePrice']"));
+                if (desc_list.Count > 0 && price_list.Count > 0)
                 {
-
-                    if (desc_list[i] != null && price_list[i] != null)
+                    for (int i = 0; i < desc_list.Count; i++)
                     {
-                        string desc = desc_list[i].Text;
-                        string price = price_list[i].Text;
-                        price = price.Substring(3).Replace(",", String.Empty);
 
-                        info.Add(new Product()
+                        if (desc_list[i] != null && price_list[i] != null)
                         {
-                            price = int.Parse(price),
-                            name = desc
-                        });
+                            string desc = desc_list[i].Text;
+                            string price = price_list[i].Text;
+                            price = price.Substring(3).Replace(",", String.Empty);
+
+                            info.Add(new Product()
+                            {
+                                price = int.Parse(price),
+                                name = desc
+                            });
+                        }
                     }
                 }
             }
+            catch (NoSuchElementException e)
+            {
+
+                info.Add(new Product()
+                {
+                    price = 0,
+                    name = "No Element"
+                });
+            }
+          
+          
             driver.Close();
             return info;
         }
@@ -60,24 +76,38 @@ namespace Client
             searchBtn.Click();
 
             Thread.Sleep(2000);
-            IList<IWebElement> desc_list = driver.FindElements(By.XPath("//span[@class = 'findify-components--text findify-components--cards--product__title']"));
-            IList<IWebElement> price_list = driver.FindElements(By.XPath("//span[@class = 'price findify-components--cards--product--price__price']"));
-            if (desc_list.Count > 0 && price_list.Count > 0)
+
+            try
             {
-                for (int i = 0; i < desc_list.Count; i++)
+                IList<IWebElement> desc_list = driver.FindElements(By.XPath("//span[@class = 'findify-components--text findify-components--cards--product__title']"));
+                IList<IWebElement> price_list = driver.FindElements(By.XPath("//span[@class = 'price findify-components--cards--product--price__price']"));
+                if (desc_list.Count > 0 && price_list.Count > 0)
                 {
-                    if (desc_list[i] != null && price_list[i] != null)
+                    for (int i = 0; i < desc_list.Count; i++)
                     {
-                        string desc = desc_list[i].Text;
-                        string price = price_list[i].Text.Substring(1).Replace(",", String.Empty);
-                        info.Add(new Product()
+                        if (desc_list[i] != null && price_list[i] != null)
                         {
-                            price = int.Parse(price),
-                            name = desc
-                        });
+                            string desc = desc_list[i].Text;
+                            string price = price_list[i].Text.Substring(1).Replace(",", String.Empty);
+                            info.Add(new Product()
+                            {
+                                price = int.Parse(price),
+                                name = desc
+                            });
+                        }
                     }
                 }
             }
+            catch (NoSuchElementException e)
+            {
+
+                info.Add(new Product()
+                {
+                    price = 0,
+                    name = "No Element"
+                });
+            }
+           
             driver.Close();
             return info;
         }
@@ -91,29 +121,43 @@ namespace Client
             var searchBar = driver.FindElementByXPath("//input[@class = 'search-query input-medium ui-autocomplete-input']");
             searchBar.SendKeys(Input);
             Thread.Sleep(3000);
-            var searchBar_li = driver.FindElement(By.XPath("//li[@class = 'ui-menu-item']"));
-            string desc = searchBar_li.Text;
-            searchBar_li.Click();
 
-            IList<IWebElement> price_list = driver.FindElements(By.XPath("//div[@id = 'used-phone-grid']/table/tbody/tr/td[8]"));
-            if (price_list.Count > 0)
+            try
             {
-                for (int i = 0; i < price_list.Count; i++)
+                var searchBar_li = driver.FindElement(By.XPath("//li[@class = 'ui-menu-item']"));
+                string desc = searchBar_li.Text;
+                searchBar_li.Click();
+
+                IList<IWebElement> price_list = driver.FindElements(By.XPath("//div[@id = 'used-phone-grid']/table/tbody/tr/td[8]"));
+                if (price_list.Count > 0)
                 {
-                    if (price_list[i] != null)
+                    for (int i = 0; i < price_list.Count; i++)
                     {
+                        if (price_list[i] != null)
+                        {
 
-                        string price = price_list[i].Text.Replace("Rs. ", string.Empty).Replace("/-", string.Empty).Replace(",", string.Empty);
+                            string price = price_list[i].Text.Replace("Rs. ", string.Empty).Replace("/-", string.Empty).Replace(",", string.Empty);
 
-                        if (int.Parse(price) > 1500)
-                            info.Add(new Product()
-                            {
-                                price = int.Parse(price),
-                                name = desc
-                            });
+                            if (int.Parse(price) > 1500)
+                                info.Add(new Product()
+                                {
+                                    price = int.Parse(price),
+                                    name = desc
+                                });
+                        }
                     }
                 }
             }
+            catch (NoSuchElementException e)
+            {
+
+                info.Add(new Product()
+                {
+                    price = 0,
+                    name = "No Element"
+                });
+            }
+           
             driver.Close();
             return info;
         }

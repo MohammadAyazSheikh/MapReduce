@@ -92,20 +92,30 @@ namespace Client
                         txtChatBox.Text += "<<<" + strName + " has joined the room>>>\r\n";
                         break;
                     case Command.Result:
-                        //clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
-                        string[] arr = new string[2];
-                        arr = msgReceived.Message.Split(',');
-                        // MessageBox.Show("index zero = " +arr[0]+"index 1 = "+arr[1]);
+                        try
+                        {
+                            string[] arr = new string[2];
+                            arr = msgReceived.Message.Split(',');
+                            // MessageBox.Show("index zero = " +arr[0]+"index 1 = "+arr[1]);
+
+                            this.BeginInvoke((MethodInvoker)delegate () {
+                                label1.Text = "";
+                                label1.Text += arr[0] + "  " + arr[1];
+                                //MessageBox.Show(label1.Text);
+                                ;
+                            });
+                            int cid = Convert.ToInt16(arr[1]);
+
+                            //sendPrice(product.FindMin("iphone 9", 1).ToString());
+                            sendPrice(product.FindMin(arr[0], cid).ToString());
+                            //sendPrice(product.Get_Min_Price(arr[0]).ToString());
+                        }
+                        catch (Exception)
+                        {
+
+                            sendPrice("-1");
+                        }
                       
-                        this.BeginInvoke((MethodInvoker)delegate () {
-                            label1.Text = "";
-                            label1.Text += arr[0]+"  "+ arr[1];
-                            //sendPrice(label1.Text)
-                            ; });
-                        int cid = Convert.ToInt16 (arr[1]);
-                        //sendPrice(product.FindMin("iphone 9", 1).ToString());
-                        sendPrice(product.FindMin(arr[0],int.Parse(arr[1])).ToString());
-                        //sendPrice(product.Get_Min_Price(arr[0]).ToString());
 
                         break;
                         
@@ -128,7 +138,7 @@ namespace Client
             { }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Client Ka arror: " + strName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Client Ka error: " + strName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
