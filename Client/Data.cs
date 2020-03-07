@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,16 +9,16 @@ namespace Client
 {
     class Data
     {
-        public string strName;      //Name by which the client logs into the room
-        public string strMessage;   //Message text
-        public Command cmdCommand;  //Command type (login, logout, send message, etcetera)
+        public string Name;      //Name by which the client logs into the room
+        public string Message;   //Message text
+        public Command cmd;  //Command type (login, logout, send message, etcetera)
 
         //Default constructor
         public Data()
         {
-            this.cmdCommand = Command.Null;
-            this.strMessage = null;
-            this.strName = null;
+            this.cmd = Command.Null;
+            this.Message = null;
+            this.Name = null;
         }
 
         //Converts the bytes into an object of type Data
@@ -32,7 +33,7 @@ namespace Client
         void ConvertToObject(byte[] data)
         {
             //The first four bytes are for the Command
-            this.cmdCommand = (Command)BitConverter.ToInt32(data, 0);
+            this.cmd = (Command)BitConverter.ToInt32(data, 0);
 
             //The next four store the length of the name
             int nameLen = BitConverter.ToInt32(data, 4);
@@ -42,15 +43,16 @@ namespace Client
 
             //This check makes sure that strName has been passed in the array of bytes
             if (nameLen > 0)
-                this.strName = Encoding.UTF8.GetString(data, 12, nameLen);
+                this.Name = Encoding.UTF8.GetString(data, 12, nameLen);
             else
-                this.strName = null;
+                this.Name = null;
 
             //This checks for a null message field
             if (msgLen > 0)
-                this.strMessage = Encoding.UTF8.GetString(data, 12 + nameLen, msgLen);
+                this.Message = Encoding.UTF8.GetString(data, 12 + nameLen, msgLen);
             else
-                this.strMessage = null;
+                this.Message = null;
+
         }
 
 
@@ -60,29 +62,61 @@ namespace Client
             List<byte> result = new List<byte>();
 
             //First four are for the Command
-            result.AddRange(BitConverter.GetBytes((int)cmdCommand));
+            result.AddRange(BitConverter.GetBytes((int)cmd));
 
             //Add the length of the name
-            if (strName != null)
-                result.AddRange(BitConverter.GetBytes(strName.Length));
+            if (Name != null)
+                result.AddRange(BitConverter.GetBytes(Name.Length));
             else
                 result.AddRange(BitConverter.GetBytes(0));
 
             //Length of the message
-            if (strMessage != null)
-                result.AddRange(BitConverter.GetBytes(strMessage.Length));
+            if (Message != null)
+                result.AddRange(BitConverter.GetBytes(Message.Length));
             else
                 result.AddRange(BitConverter.GetBytes(0));
 
             //Add the name
-            if (strName != null)
-                result.AddRange(Encoding.UTF8.GetBytes(strName));
+            if (Name != null)
+                result.AddRange(Encoding.UTF8.GetBytes(Name));
 
             //And, lastly we add the message text to our array of bytes
-            if (strMessage != null)
-                result.AddRange(Encoding.UTF8.GetBytes(strMessage));
+            if (Message != null)
+                result.AddRange(Encoding.UTF8.GetBytes(Message));
 
             return result.ToArray();
+        }
+
+
+        public byte[] FileToByte()
+        {
+            List<byte> result = new List<byte>();
+            result.AddRange(BitConverter.GetBytes((int)cmd));
+
+            //Read file to byte array
+            byte[] bytes = File.ReadAllBytes("file.txt");
+
+            result.AddRange(bytes);
+            return result.ToArray();
+
+        }
+
+        public void ByteToFile(byte[] fileBytes)
+        {
+
+            byte[] arr = new byte[fileBytes.Length - 4];
+            int j = 4;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = fileBytes[j];
+                j++;
+            }
+
+            using (Stream file = File.OpenWrite("file.txt"))
+            {
+                file.Write(arr, 0, arr.Length);
+            }
+
         }
 
        

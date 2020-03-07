@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -20,10 +21,13 @@ namespace Map_Reduce
     public partial class MainForm : Form
     {
 
+      
+        
         struct ClientInfo
         {
             public Socket socket;   //Socket of the client
             public string strName;  //Name by which the user logged into the chat room
+            public int id;
         }
 
         //The collection of all clients logged into the room (an array of type ClientInfo)
@@ -31,6 +35,9 @@ namespace Map_Reduce
 
         //The main socket on which the server listens to the clients
         Socket serverSocket;
+
+        int id = 0;
+
 
         byte[] byteData = new byte[1024];
         public MainForm()
@@ -91,17 +98,22 @@ namespace Map_Reduce
         {
             try
             {
-                Socket clientSocket = (Socket)ar.AsyncState;
-                clientSocket.EndReceive(ar);
+                Socket Current_ClientSocket = (Socket)ar.AsyncState;
+                Current_ClientSocket.EndReceive(ar);
+
+
 
                 //Transform the array of bytes received from the user into an
                 //intelligent form of object Data
                 Data msgReceived = new Data(byteData);
+              
+              
 
                 //We will send this object in response the users request
                 Data msgToSend = new Data();
 
                 byte[] message;
+                
 
                 //If the message is to login, logout, or simple text message
                 //then when send to others the type of the message remains the same
@@ -114,13 +126,14 @@ namespace Map_Reduce
 
                         //When a user logs in to the server then we add her to our
                         //list of clients
-
+                        id++;
                         ClientInfo clientInfo = new ClientInfo();
-                        clientInfo.socket = clientSocket;
+                        clientInfo.socket = Current_ClientSocket;
                         clientInfo.strName = msgReceived.Name;
+                        clientInfo.id = id;
 
                         clientList.Add(clientInfo);
-
+                        
                         //Set the text of the message that we will broadcast to all users
                         msgToSend.Message = "<<<" + msgReceived.Name + " has joined the room>>>";
                         break;
@@ -133,7 +146,7 @@ namespace Map_Reduce
                         int nIndex = 0;
                         foreach (ClientInfo client in clientList)
                         {
-                            if (client.socket == clientSocket)
+                            if (client.socket == Current_ClientSocket)
                             {
                                 clientList.RemoveAt(nIndex);
                                 break;
@@ -141,7 +154,7 @@ namespace Map_Reduce
                             ++nIndex;
                         }
 
-                        clientSocket.Close();
+                        Current_ClientSocket.Close();
 
                         msgToSend.Message = "<<<" + msgReceived.Name + " has left the room>>>";
                         break;
@@ -150,6 +163,7 @@ namespace Map_Reduce
 
                         //Set the text of the message that we will broadcast to all users
                         msgToSend.Message = msgReceived.Name + ": " + msgReceived.Message;
+                        
                         break;
 
                     case Command.List:
@@ -169,10 +183,15 @@ namespace Map_Reduce
                         message = msgToSend.ConvertToByte();
 
                         //Send the name of the users in the chat room
-                        clientSocket.BeginSend(message, 0, message.Length, SocketFlags.None,
-                                new AsyncCallback(OnSend), clientSocket);
+                        Current_ClientSocket.BeginSend(message, 0, message.Length, SocketFlags.None,
+                                new AsyncCallback(OnSend), Current_ClientSocket);
+                        break;
+                    case Command.Result:
+                       
                         break;
                 }
+
+              
 
                 if (msgToSend.cmd != Command.List)   //List messages are not broadcasted
                 {
@@ -180,14 +199,14 @@ namespace Map_Reduce
 
                     foreach (ClientInfo clientInfo in clientList)
                     {
-                        if (clientInfo.socket != clientSocket ||msgToSend.cmd != Command.Login)
+                        if (clientInfo.socket != Current_ClientSocket ||msgToSend.cmd != Command.Login)
                         {
                             //Send the message to all users
                             clientInfo.socket.BeginSend(message, 0, message.Length, SocketFlags.None,
                                 new AsyncCallback(OnSend), clientInfo.socket);
                         }
                     }
-                    this.BeginInvoke((System.Windows.Forms.MethodInvoker)delegate () { txtLog.Text += msgToSend.Message + "\r\n"; });
+                    this.BeginInvoke((MethodInvoker)delegate () { txtLog.Text += msgToSend.Message + "\r\n"; });
                     // txtLog.Text += msgToSend.strMessage + "\r\n";
                 }
 
@@ -195,7 +214,7 @@ namespace Map_Reduce
                 if (msgReceived.cmd != Command.Logout)
                 {
                     //Start listening to the message send by the user
-                    clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Receive_Callback), clientSocket);
+                    Current_ClientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Receive_Callback), Current_ClientSocket);
                 }
             }
             catch (Exception ex)
@@ -214,6 +233,36 @@ namespace Map_Reduce
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //Fill the info for the message to be send
+                Data msgSnd = new Data();
+
+                msgSnd.cmd = Command.Result;
+               
+               
+
+                //Send it to the all clients
+               
+                foreach (ClientInfo clientInfo in clientList)
+                {
+                    msgSnd.Message = txtInput.Text+","+ clientInfo.id;
+                    byte[] byteData = msgSnd.ConvertToByte();
+                    //Send the message to all users
+                    clientInfo.socket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None,new AsyncCallback(OnSend), clientInfo.socket);
+                    
+                }
+
+                
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to send message to the server.", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

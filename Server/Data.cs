@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,5 +82,36 @@ namespace Map_Reduce
 
             return result.ToArray();
         }
+
+        public byte[] FileToByte()
+        {
+            List<byte> result = new List<byte>();
+            result.AddRange(BitConverter.GetBytes((int)cmd));
+            //Read file to byte array
+
+            byte[] bytes = File.ReadAllBytes("myfile.txt");
+
+            result.AddRange(bytes);
+            return result.ToArray();
+        }
+
+        public void ByteToFile(byte[] fileBytes)
+        {
+
+            byte[] arr = new byte[fileBytes.Length - 4];
+            int j = 4;
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = fileBytes[j];
+                j++;
+            }
+
+            using (Stream file = File.OpenWrite("file.txt"))
+            {
+                file.Write(arr, 0, arr.Length);
+            }
+
+        }
+
     }
 }

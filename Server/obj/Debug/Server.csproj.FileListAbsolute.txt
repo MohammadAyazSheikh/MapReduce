@@ -6,3 +6,8 @@ C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\Map_Reduce.exe
 C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\Map_Reduce.pdb
 C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Map_Reduce.exe
 C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Map_Reduce.pdb
+C:\Users\moham\Desktop\NP\MapReduce\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\WebDriver.dll
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\WebDriver.Support.dll
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\WebDriver.xml
+C:\Users\moham\Desktop\NP\MapReduce\Server\bin\Debug\WebDriver.Support.xml

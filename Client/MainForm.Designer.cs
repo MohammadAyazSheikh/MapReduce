@@ -32,6 +32,8 @@
             this.txtMessage = new System.Windows.Forms.TextBox();
             this.txtChatBox = new System.Windows.Forms.TextBox();
             this.btnSend = new System.Windows.Forms.Button();
+            this.btnSendFile = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lstChatters
@@ -73,11 +75,32 @@
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
+            // btnSendFile
+            // 
+            this.btnSendFile.Location = new System.Drawing.Point(625, 98);
+            this.btnSendFile.Name = "btnSendFile";
+            this.btnSendFile.Size = new System.Drawing.Size(75, 23);
+            this.btnSendFile.TabIndex = 9;
+            this.btnSendFile.Text = "Send File";
+            this.btnSendFile.UseVisualStyleBackColor = true;
+            this.btnSendFile.Click += new System.EventHandler(this.btnSendFile_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(587, 223);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "label1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 374);
+            this.ClientSize = new System.Drawing.Size(766, 421);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnSendFile);
             this.Controls.Add(this.lstChatters);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.txtChatBox);
@@ -96,5 +119,7 @@
         private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.TextBox txtChatBox;
         private System.Windows.Forms.Button btnSend;
+        private System.Windows.Forms.Button btnSendFile;
+        private System.Windows.Forms.Label label1;
     }
 }

@@ -19,6 +19,8 @@ namespace Client
         public LogIn()
         {
             InitializeComponent();
+            txtName.Text = "zyz";
+            txtServerIP.Text = "127.0.0.1";
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -65,9 +67,9 @@ namespace Client
 
                 //We are connected so we login into the server
                 Data msgToSend = new Data();
-                msgToSend.cmdCommand = Command.Login;
-                msgToSend.strName = txtName.Text;
-                msgToSend.strMessage = null;
+                msgToSend.cmd = Command.Login;
+                msgToSend.Name = txtName.Text;
+                msgToSend.Message = null;
 
                 byte[] b = msgToSend.ConvertToByte();
 
