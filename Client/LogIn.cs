@@ -19,7 +19,7 @@ namespace Client
         public LogIn()
         {
             InitializeComponent();
-            txtName.Text = "zyz";
+            txtName.Text = "Client 1";
             txtServerIP.Text = "127.0.0.1";
         }
 
@@ -34,7 +34,7 @@ namespace Client
                 IPEndPoint ipEndPoint = new IPEndPoint(ipAddress, 1000);
 
                 //Connect to the server
-                clientSocket.BeginConnect(ipEndPoint, new AsyncCallback(OnConnect), null);
+                clientSocket.BeginConnect(ipEndPoint, new AsyncCallback(Connect_Callback), null);
             }
             catch (Exception ex)
             {
@@ -54,12 +54,12 @@ namespace Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SGSclient", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Client Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
 
-        private void OnConnect(IAsyncResult ar)
+        private void Connect_Callback(IAsyncResult ar)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Client
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SGSclient", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Client Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

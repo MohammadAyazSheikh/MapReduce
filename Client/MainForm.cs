@@ -24,34 +24,55 @@ namespace Client
         {
            
             InitializeComponent();
-            btnSend.Enabled = true;
+            //btnSend.Enabled = true;
         }
 
-        private void btnSend_Click(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            try
-            {
-                //Fill the info for the message to be send
-                Data msgToSend = new Data();
+            this.Text = "Client: " + strName;
 
-                msgToSend.Name = strName;
-                msgToSend.Message = txtMessage.Text;
-                msgToSend.cmd = Command.Message;
 
-                byte[] byteData = msgToSend.ConvertToByte();
+            //The user has logged into the system so we now request the server to send
+            //the names of all users who are in the chat room
+            Data msgToSend = new Data();
+            msgToSend.cmd = Command.List;
+            msgToSend.Name = strName;
+            msgToSend.Message = null;
 
-                //Send it to the server
-                clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+            byteData = msgToSend.ConvertToByte();
 
-                txtMessage.Text = null;
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to send message to the server.", "SGSclientTCP: " + strName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Send_Callback), null);
+
+            byteData = new byte[1024];
+            //Start listening to the data asynchronously
+            clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Receive_Callback), null);
         }
 
-        private void OnSend(IAsyncResult ar)
+        //private void btnSend_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        //Fill the info for the message to be send
+        //        Data msgToSend = new Data();
+
+        //        msgToSend.Name = strName;
+        //        msgToSend.Message = txtMessage.Text;
+        //        msgToSend.cmd = Command.Message;
+
+        //        byte[] byteData = msgToSend.ConvertToByte();
+
+        //        //Send it to the server
+        //        clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+
+        //        txtMessage.Text = null;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        MessageBox.Show("Unable to send message to the server.", "SGSclientTCP: " + strName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
+
+        private void Send_Callback(IAsyncResult ar)
         {
             try
             {
@@ -61,11 +82,11 @@ namespace Client
             { }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "SGSclientTCP: " + strName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "Client Error: " + strName, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void OnReceive(IAsyncResult ar)
+        private void Receive_Callback(IAsyncResult ar)
         {
             try
             {
@@ -96,7 +117,7 @@ namespace Client
                         {
                             string[] arr = new string[2];
                             arr = msgReceived.Message.Split(',');
-                            // MessageBox.Show("index zero = " +arr[0]+"index 1 = "+arr[1]);
+                           
 
                             this.BeginInvoke((MethodInvoker)delegate () {
                                 label1.Text = "";
@@ -104,10 +125,10 @@ namespace Client
                                 //MessageBox.Show(label1.Text);
                                 ;
                             });
-                            int cid = Convert.ToInt16(arr[1]);
+                            int client_Id = Convert.ToInt16(arr[1]);
 
                             //sendPrice(product.FindMin("iphone 9", 1).ToString());
-                            sendPrice(product.FindMin(arr[0], cid).ToString());
+                            sendPrice(product.FindMin(arr[0], client_Id).ToString());
                             //sendPrice(product.Get_Min_Price(arr[0]).ToString());
                         }
                         catch (Exception)
@@ -115,22 +136,14 @@ namespace Client
 
                             sendPrice("-1");
                         }
-                      
-
                         break;
-                        
-                   
                 }
-
-              
-
-
 
                 if (msgReceived.Message != null && msgReceived.cmd != Command.List)
                     txtChatBox.Text += msgReceived.Message + "\r\n";
 
                 byteData = new byte[1024];
-                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
+                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Receive_Callback), null);
 
 
             }
@@ -144,61 +157,42 @@ namespace Client
 
      
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            this.Text = "Client: " + strName;
-            
+      
 
-            //The user has logged into the system so we now request the server to send
-            //the names of all users who are in the chat room
-            Data msgToSend = new Data();
-            msgToSend.cmd = Command.List;
-            msgToSend.Name = strName;
-            msgToSend.Message = null;
+        //private void txtChatBox_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Enter)
+        //    {
+        //        //btnSend_Click(sender, null);
+        //    }
+        //}
 
-            byteData = msgToSend.ConvertToByte();
+        //private void btnSendFile_Click(object sender, EventArgs e)
+        //{
+        //    try
+        //    {
+        //        //Fill the info for the message to be send
+        //        Data msgSnd = new Data();
 
-            clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+        //        msgSnd.cmd = Command.Message;
+        //        msgSnd.Message = txtMessage.Text;
+        //        byte[] byteData = msgSnd.ConvertToByte();
 
-            byteData = new byte[1024];
-            //Start listening to the data asynchronously
-            clientSocket.BeginReceive(byteData,  0, byteData.Length,     SocketFlags.None, new AsyncCallback(OnReceive), null);
-        }
-
-        private void txtChatBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                btnSend_Click(sender, null);
-            }
-        }
-
-        private void btnSendFile_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                //Fill the info for the message to be send
-                Data msgSnd = new Data();
-
-                msgSnd.cmd = Command.Message;
-                msgSnd.Message = txtMessage.Text;
-                byte[] byteData = msgSnd.ConvertToByte();
-
-                //Send it to the all clients
+        //        //Send it to the all clients
 
 
-                //Send the message to all users
-                clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None,  new AsyncCallback(OnSend), clientSocket);
+        //        //Send the message to all users
+        //        clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None,  new AsyncCallback(OnSend), clientSocket);
 
-                clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
+        //        clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 
 
-            }
-            catch (Exception)
-            {
-                //MessageBox.Show("Unable to send message to the server.", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        //MessageBox.Show("Unable to send message to the server.", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //    }
+        //}
 
         void sendPrice(string Price)
         {
@@ -216,7 +210,7 @@ namespace Client
                 byte[] byteData = msgToSend.ConvertToByte();
                 
                 //Send it to the server
-                clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+                clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Send_Callback), null);
                
                 
             }

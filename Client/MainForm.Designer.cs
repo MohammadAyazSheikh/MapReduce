@@ -28,83 +28,87 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lstChatters = new System.Windows.Forms.ListBox();
-            this.txtMessage = new System.Windows.Forms.TextBox();
             this.txtChatBox = new System.Windows.Forms.TextBox();
-            this.btnSend = new System.Windows.Forms.Button();
-            this.btnSendFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblStats = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lstChatters
             // 
+            this.lstChatters.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.lstChatters.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstChatters.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstChatters.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lstChatters.FormattingEnabled = true;
-            this.lstChatters.Location = new System.Drawing.Point(412, 50);
+            this.lstChatters.ItemHeight = 22;
+            this.lstChatters.Location = new System.Drawing.Point(448, 48);
             this.lstChatters.Name = "lstChatters";
-            this.lstChatters.Size = new System.Drawing.Size(103, 277);
+            this.lstChatters.Size = new System.Drawing.Size(103, 264);
             this.lstChatters.TabIndex = 8;
-            // 
-            // txtMessage
-            // 
-            this.txtMessage.Location = new System.Drawing.Point(42, 306);
-            this.txtMessage.Name = "txtMessage";
-            this.txtMessage.Size = new System.Drawing.Size(282, 20);
-            this.txtMessage.TabIndex = 7;
             // 
             // txtChatBox
             // 
-            this.txtChatBox.BackColor = System.Drawing.SystemColors.Window;
+            this.txtChatBox.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.txtChatBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtChatBox.Enabled = false;
+            this.txtChatBox.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtChatBox.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.txtChatBox.Location = new System.Drawing.Point(42, 48);
             this.txtChatBox.Multiline = true;
             this.txtChatBox.Name = "txtChatBox";
             this.txtChatBox.ReadOnly = true;
             this.txtChatBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtChatBox.Size = new System.Drawing.Size(363, 252);
+            this.txtChatBox.Size = new System.Drawing.Size(363, 266);
             this.txtChatBox.TabIndex = 6;
-            this.txtChatBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtChatBox_KeyDown);
-            // 
-            // btnSend
-            // 
-            this.btnSend.Enabled = false;
-            this.btnSend.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnSend.Location = new System.Drawing.Point(330, 306);
-            this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 21);
-            this.btnSend.TabIndex = 5;
-            this.btnSend.Text = "&Send";
-            this.btnSend.UseVisualStyleBackColor = true;
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
-            // 
-            // btnSendFile
-            // 
-            this.btnSendFile.Location = new System.Drawing.Point(625, 98);
-            this.btnSendFile.Name = "btnSendFile";
-            this.btnSendFile.Size = new System.Drawing.Size(75, 23);
-            this.btnSendFile.TabIndex = 9;
-            this.btnSendFile.Text = "Send File";
-            this.btnSendFile.UseVisualStyleBackColor = true;
-            this.btnSendFile.Click += new System.EventHandler(this.btnSendFile_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(587, 223);
+            this.label1.Location = new System.Drawing.Point(39, 335);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 10;
             this.label1.Text = "label1";
             // 
+            // lblStats
+            // 
+            this.lblStats.AutoSize = true;
+            this.lblStats.BackColor = System.Drawing.Color.Transparent;
+            this.lblStats.Font = new System.Drawing.Font("Microsoft YaHei UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStats.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.lblStats.Location = new System.Drawing.Point(40, 11);
+            this.lblStats.Name = "lblStats";
+            this.lblStats.Size = new System.Drawing.Size(373, 36);
+            this.lblStats.TabIndex = 11;
+            this.lblStats.Text = "MESSAGES FROM OTHERS";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Transparent;
+            this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label2.Location = new System.Drawing.Point(443, 11);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(125, 26);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "CLIENT LIST";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 421);
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(583, 365);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblStats);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.btnSendFile);
             this.Controls.Add(this.lstChatters);
-            this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.txtChatBox);
-            this.Controls.Add(this.btnSend);
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -116,10 +120,9 @@
         #endregion
 
         private System.Windows.Forms.ListBox lstChatters;
-        private System.Windows.Forms.TextBox txtMessage;
         private System.Windows.Forms.TextBox txtChatBox;
-        private System.Windows.Forms.Button btnSend;
-        private System.Windows.Forms.Button btnSendFile;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblStats;
+        private System.Windows.Forms.Label label2;
     }
 }
