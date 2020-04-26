@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,12 +22,11 @@ namespace Map_Reduce
     public partial class MainForm : Form
     {
 
-      
-        
-     
+        //flag for from closing 
+        bool FormCloseFlag = false;
 
         //The collection of all clients logged into the room (an array of type ClientInfo)
-        ArrayList clientList;
+        List<Client_Info> clientList;
 
         //The main socket on which the server listens to the clients
         Socket serverSocket;
@@ -34,13 +34,20 @@ namespace Map_Reduce
         //client id
         int id = 0;
 
+        //this queue is for logout client's ids
+        Queue<int> id_List = new Queue<int>();
+        //we we will add min price from each website in this list
         List<int> price_List = new List<int>();
 
+        List<Product> pro_list = new List<Product>();
+      
         byte[] byteData = new byte[1024];
+
         public MainForm()
         {
-            clientList = new ArrayList();
+            clientList = new List<Client_Info>();
             InitializeComponent();
+           
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -67,7 +74,7 @@ namespace Map_Reduce
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Server Error",
+                    MessageBox.Show(ex.Message, "Server Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -122,17 +129,54 @@ namespace Map_Reduce
 
                         //When a user logs in to the server then we add her to our
                         //list of clients
-                        id++;
                         Client_Info clientInfo = new Client_Info();
-                        clientInfo.socket = Current_ClientSocket;
-                        clientInfo.strName = msgReceived.Name;
-                        clientInfo.id = id;
-                        clientInfo.flag = false;
+                        if (clientList.Count < 4)
+                        {
+                            
+                            if (id_List.Count > 0)
+                            {
+                               
+                                clientInfo.socket = Current_ClientSocket;
+                                clientInfo.strName = msgReceived.Name;
+                                clientInfo.id = id_List.Dequeue();
+                                clientInfo.flag = false;
+                                clientList.Add(clientInfo);
+                                //Set the text of the message that we will broadcast to all users
+                                msgToSend.Message = "<<<" + msgReceived.Name + " has joined the room and Id is" + clientInfo.id + ">>>";
+                            }
+                            else
+                            {
+                                id++;
+                                clientInfo.socket = Current_ClientSocket;
+                                clientInfo.strName = msgReceived.Name;
+                                clientInfo.id = id;
+                                clientInfo.flag = false;
+                                clientList.Add(clientInfo);
+                                //Set the text of the message that we will broadcast to all users
+                                msgToSend.Message = "<<<" + msgReceived.Name + " has joined the room and Id is" + id + ">>>";
+                               
 
-                        clientList.Add(clientInfo);
-                        
-                        //Set the text of the message that we will broadcast to all users
-                        msgToSend.Message = "<<<" + msgReceived.Name + " has joined the room>>>";
+                            }
+
+
+                        }
+                        else
+                        {
+                            this.BeginInvoke((MethodInvoker)delegate ()
+                            {
+                                // MessageBox.Show("Only 4 clients can be connected");
+                                txtLog.Text += "Server: Only 4 clients can be connected\n";    
+                            });
+
+                            //sending new client to logout because of no room for 5th client.
+                            Data msg = new Data();
+                            msg.Message = "Logout";
+                            msg.cmd = Command.Message;
+                            byte[] arrByte = msg.ConvertToByte();
+                            arrByte = msg.ConvertToByte();
+                            Current_ClientSocket.BeginSend(arrByte, 0, arrByte.Length, SocketFlags.None, new AsyncCallback(Send_Callback), Current_ClientSocket);
+                        }
+                    
                         break;
 
                     case Command.Logout:
@@ -145,16 +189,19 @@ namespace Map_Reduce
                         {
                             if (client.socket == Current_ClientSocket)
                             {
+                                id_List.Enqueue(client.id);
                                 clientList.RemoveAt(nIndex);
+                                msgToSend.Message = "<<<" +client.strName +" has left the room>>>";
                                 break;
                             }
                             ++nIndex;
                         }
-
+                       
                         Current_ClientSocket.Close();
 
-                        msgToSend.Message = "<<<" + msgReceived.Name + " has left the room>>>";
+                     
                         break;
+
 
                     case Command.Message:
 
@@ -168,10 +215,16 @@ namespace Map_Reduce
                                 if ((int.Parse(msgReceived.Message) > 0))
                                 {
                                     price_List.Add(int.Parse(msgReceived.Message));
+
+                                    pro_list.Add(new Product() {
+                                        price = int.Parse(msgReceived.Message),
+                                        Client_Id = client.id
+                                    });
                                 }
                                
                             }
                         }
+                        
 
                         break;
 
@@ -194,21 +247,20 @@ namespace Map_Reduce
                         //Send the name of the users in the chat room
                         Current_ClientSocket.BeginSend(message, 0, message.Length, SocketFlags.None, new AsyncCallback(Send_Callback), Current_ClientSocket);
                         break;
-                    case Command.Result:
-                        break;
+   
                 }
 
-              
+
                 if (msgToSend.cmd != Command.List)   //List messages are not broadcasted
                 {
                     message = msgToSend.ConvertToByte();
 
                     foreach (Client_Info clientInfo in clientList)
                     {
-                        if (clientInfo.socket != Current_ClientSocket ||msgToSend.cmd != Command.Login)
+                        if (clientInfo.socket != Current_ClientSocket || msgToSend.cmd != Command.Login)
                         {
                             //Send the message to all users
-                            clientInfo.socket.BeginSend(message, 0, message.Length, SocketFlags.None,  new AsyncCallback(Send_Callback), clientInfo.socket);
+                            clientInfo.socket.BeginSend(message, 0, message.Length, SocketFlags.None, new AsyncCallback(Send_Callback), clientInfo.socket);
                         }
                     }
                     this.BeginInvoke((MethodInvoker)delegate () { txtLog.Text += msgToSend.Message + "\r\n"; });
@@ -230,28 +282,37 @@ namespace Map_Reduce
                             try
                             {
                                 int minPrice = price_List.Min();
+
                                 txtLog.Text += "count var = " + count + " : list count = " + clientList.Count + " min price = " + minPrice + "\r\n";
 
-                                foreach (Client_Info client in clientList)
+                                foreach (Product item in pro_list)
                                 {
-                                    if (client.socket == Current_ClientSocket)
+                                    if (item.price == minPrice)
                                     {
-                                        if (client.id == 1)
-                                            lblResult.Text = txtInput.Text + " is available at 'Shopbuzz.pk\n' with lowest price "+minPrice +"Rs.";
-                                        else if (client.id == 2)
-                                            lblResult.Text = txtInput.Text + " is available at 'Ishopping.pk\n' with lowest price " + minPrice + "Rs.";
+                                        int id = item.Client_Id;
+                                        if (id == 1)
+                                            lblResult.Text = txtInput.Text + " is available at 'PriceOye.pk\n' with lowest price " + minPrice + "Rs.";
+                                        else if (id == 2)
+                                            lblResult.Text = txtInput.Text + " is available at 'IShopping.pk\n' with lowest price " + minPrice + "Rs.";
+                                        else if (id == 3)
+                                            lblResult.Text = txtInput.Text + " is available at 'HomeShopping.pk.pk\n' with lowest price " + minPrice + "Rs.";
+                                        else if (id == 4)
+                                            lblResult.Text = txtInput.Text + " is available at 'ShopBuzz.pk\n' with lowest price " + minPrice + "Rs.";
                                         break;
                                     }
+                                    price_List.Clear();
+                                    pro_list.Clear();
                                 }
-                               
+
+
                             }
                             catch (Exception)
                             {
 
-                                
-                                txtLog.Text += "Sorry, We Are Unable To Crawl Data "+"\r\n";
+                                txtLog.Text += "Sorry, We Are Unable To Crawl Data " + "\r\n";
+
                             }
-                           
+
                             foreach (Client_Info client in clientList)
                             {
                                 client.flag = false;
@@ -318,7 +379,56 @@ namespace Map_Reduce
             catch (Exception)
             {
                 MessageBox.Show("Unable to send message to the server.", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }  
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+           
+            try
+            {
+               
+                Data msgSnd = new Data();
+
+                msgSnd.cmd = Command.Result;
+                msgSnd.Message = "ServerLogOut";
+
+
+                //Send it to the all clients for logging Out
+
+                foreach (Client_Info clientInfo in clientList)
+                {
+
+                    byte[] byteData = msgSnd.ConvertToByte();
+                    //Send the message to all users
+                    clientInfo.socket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Send_Callback), clientInfo.socket);
+                    //stop listenting from client
+                    clientInfo.socket.Close();
+
+                }
+
+                //closing server
+                FormCloseFlag = true; 
+                this.Close();
+
             }
+            catch (Exception)
+            {
+                MessageBox.Show("", "Server Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (FormCloseFlag)
+            {
+                e.Cancel = false;
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+           
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Client
         static List<Product> ls_Shopbuzz = new List<Product>();
         static List<Product> ls_Ishopping = new List<Product>();
         static List<Product> ls_HomeShopping = new List<Product>();
+        static List<Product> ls_PriceOye = new List<Product>();
         Crawler crawl = new Crawler();
         public string name { get; set; }
         public int price { get; set; }
@@ -31,33 +32,32 @@ namespace Client
 
         public int FindMin(string Input,int id)
         {
-            ls_Shopbuzz = crawl.GetData_Shopbuzz(Input);
-            ls_Ishopping = crawl.GetData_Ishopping(Input);
+            
             if (id == 1)
             {
-                return Get_Min(ls_Shopbuzz); ;
+                ls_PriceOye = crawl.GetData_PriceOye(Input);
+                return Get_Min(ls_PriceOye);
             }
             else if (id == 2)
             {
+                ls_Ishopping = crawl.GetData_Ishopping(Input);
                 return Get_Min(ls_Ishopping);
+            }
+            else if (id == 3)
+            {
+                ls_HomeShopping = crawl.GetData_HomeShopping(Input);
+                return Get_Min(ls_HomeShopping);
+            }
+            else if (id == 4)
+            {
+                ls_Shopbuzz = crawl.GetData_Shopbuzz(Input);
+                return Get_Min(ls_Shopbuzz);
             }
             else
             {
                 return 0;
             }
             
-        }
-        public int Get_Min_Price(string Input)
-        {
-            ls_Shopbuzz = crawl.GetData_Shopbuzz(Input);
-            ls_Ishopping = crawl.GetData_Ishopping(Input);
-
-          
-            int[] arr = new int[2];
-            arr[0] = Get_Min(ls_Shopbuzz);
-            arr[1] = Get_Min(ls_Ishopping);
-
-            return arr.Min();
         }
     }
 }

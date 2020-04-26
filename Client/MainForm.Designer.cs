@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lstChatters = new System.Windows.Forms.ListBox();
-            this.txtChatBox = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.lblStats = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btn_Logout = new System.Windows.Forms.Button();
+            this.txtChatBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // lstChatters
@@ -49,37 +49,13 @@
             this.lstChatters.Size = new System.Drawing.Size(103, 264);
             this.lstChatters.TabIndex = 8;
             // 
-            // txtChatBox
-            // 
-            this.txtChatBox.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.txtChatBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtChatBox.Enabled = false;
-            this.txtChatBox.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtChatBox.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.txtChatBox.Location = new System.Drawing.Point(42, 48);
-            this.txtChatBox.Multiline = true;
-            this.txtChatBox.Name = "txtChatBox";
-            this.txtChatBox.ReadOnly = true;
-            this.txtChatBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtChatBox.Size = new System.Drawing.Size(363, 266);
-            this.txtChatBox.TabIndex = 6;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 335);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "label1";
-            // 
             // lblStats
             // 
             this.lblStats.AutoSize = true;
             this.lblStats.BackColor = System.Drawing.Color.Transparent;
             this.lblStats.Font = new System.Drawing.Font("Microsoft YaHei UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStats.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lblStats.Location = new System.Drawing.Point(40, 11);
+            this.lblStats.Location = new System.Drawing.Point(10, 11);
             this.lblStats.Name = "lblStats";
             this.lblStats.Size = new System.Drawing.Size(373, 36);
             this.lblStats.TabIndex = 11;
@@ -91,11 +67,35 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label2.Location = new System.Drawing.Point(443, 11);
+            this.label2.Location = new System.Drawing.Point(436, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(125, 26);
             this.label2.TabIndex = 12;
             this.label2.Text = "CLIENT LIST";
+            // 
+            // btn_Logout
+            // 
+            this.btn_Logout.BackColor = System.Drawing.SystemColors.GrayText;
+            this.btn_Logout.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold);
+            this.btn_Logout.ForeColor = System.Drawing.Color.White;
+            this.btn_Logout.Location = new System.Drawing.Point(448, 316);
+            this.btn_Logout.Name = "btn_Logout";
+            this.btn_Logout.Size = new System.Drawing.Size(103, 45);
+            this.btn_Logout.TabIndex = 13;
+            this.btn_Logout.Text = "Cancel";
+            this.btn_Logout.UseVisualStyleBackColor = false;
+            this.btn_Logout.Click += new System.EventHandler(this.btn_Logout_Click);
+            // 
+            // txtChatBox
+            // 
+            this.txtChatBox.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.txtChatBox.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold);
+            this.txtChatBox.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.txtChatBox.Location = new System.Drawing.Point(12, 48);
+            this.txtChatBox.Name = "txtChatBox";
+            this.txtChatBox.Size = new System.Drawing.Size(400, 264);
+            this.txtChatBox.TabIndex = 14;
+            this.txtChatBox.Text = "";
             // 
             // MainForm
             // 
@@ -103,14 +103,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(583, 365);
+            this.ClientSize = new System.Drawing.Size(563, 365);
+            this.Controls.Add(this.txtChatBox);
+            this.Controls.Add(this.btn_Logout);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.lblStats);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.lstChatters);
-            this.Controls.Add(this.txtChatBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -120,9 +122,9 @@
         #endregion
 
         private System.Windows.Forms.ListBox lstChatters;
-        private System.Windows.Forms.TextBox txtChatBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblStats;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btn_Logout;
+        private System.Windows.Forms.RichTextBox txtChatBox;
     }
 }

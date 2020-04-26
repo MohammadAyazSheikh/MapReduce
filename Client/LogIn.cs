@@ -43,22 +43,6 @@ namespace Client
         }
 
 
-        private void OnSend(IAsyncResult ar)
-        {
-            try
-            {
-                clientSocket.EndSend(ar);
-                strName = txtName.Text;
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Client Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-
         private void Connect_Callback(IAsyncResult ar)
         {
             try
@@ -74,7 +58,22 @@ namespace Client
                 byte[] b = msgToSend.ConvertToByte();
 
                 //Send the message to the server
-                clientSocket.BeginSend(b, 0, b.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+                clientSocket.BeginSend(b, 0, b.Length, SocketFlags.None, new AsyncCallback(Send_Callback), null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Client Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void Send_Callback(IAsyncResult ar)
+        {
+            try
+            {
+                clientSocket.EndSend(ar);
+                strName = txtName.Text;
+                DialogResult = DialogResult.OK;
+                Close();
             }
             catch (Exception ex)
             {

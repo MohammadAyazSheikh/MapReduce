@@ -9,8 +9,8 @@ namespace Map_Reduce
 {  
     class Data
     {
-        public string Name;      //Name by which the client logs into the room
-        public string Message;   //Message text
+        public string Name;     
+        public string Message;   
         public Command cmd;  //Command type (login, logout, send message, etcetera)
         //Default constructor
         public Data()
@@ -82,36 +82,5 @@ namespace Map_Reduce
 
             return result.ToArray();
         }
-
-        public byte[] FileToByte()
-        {
-            List<byte> result = new List<byte>();
-            result.AddRange(BitConverter.GetBytes((int)cmd));
-            //Read file to byte array
-
-            byte[] bytes = File.ReadAllBytes("myfile.txt");
-
-            result.AddRange(bytes);
-            return result.ToArray();
-        }
-
-        public void ByteToFile(byte[] fileBytes)
-        {
-
-            byte[] arr = new byte[fileBytes.Length - 4];
-            int j = 4;
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arr[i] = fileBytes[j];
-                j++;
-            }
-
-            using (Stream file = File.OpenWrite("file.txt"))
-            {
-                file.Write(arr, 0, arr.Length);
-            }
-
-        }
-
     }
 }
