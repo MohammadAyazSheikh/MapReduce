@@ -33,12 +33,14 @@ namespace Client
                 Thread.Sleep(3000);
                 var searchBar = driver.FindElementByXPath("//input[@id = 'search']");
                 searchBar.SendKeys(Input);
+               
                 var searchBtn = driver.FindElementByXPath("//button[@type = 'submit'][@title = 'Search']");
-                Thread.Sleep(2000);
+                //Thread.Sleep(2000);
                 searchBtn.Click();
                 Thread.Sleep(3000);
                 desc_list = driver.FindElements(By.XPath("//div[@class= 'kuNameDesc']/div[@class ='kuName']"));
                 price_list = driver.FindElements(By.XPath("//div[@class ='kuPrice']/div[@class = 'kuSalePrice']"));
+
                 if (desc_list.Count > 0 && price_list.Count > 0)
                 {
                     for (int i = 0; i < desc_list.Count; i++)
@@ -74,6 +76,8 @@ namespace Client
             driver.Quit();
             return info;
         }
+
+
         public List<Product> GetData_HomeShopping(string Input)
         {
             driver = new ChromeDriver();

@@ -90,6 +90,7 @@ namespace Client
                     //Send it to the server
                     clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(Send_Callback), null);
                     clientSocket.Close();
+                    FormCloseFlag = true;
                     this.Close();
 
                 } //below else block will run if server log out

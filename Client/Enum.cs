@@ -16,4 +16,10 @@ namespace Client
         Result,
         Limit
     }
+
+
 }
+
+
+
+

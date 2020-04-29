@@ -8,14 +8,18 @@ namespace Client
 {
     class Product
     {
+
+        public string name { get; set; }
+        public int price { get; set; }
+
+
+
         static List<Product> ls_Shopbuzz = new List<Product>();
         static List<Product> ls_Ishopping = new List<Product>();
         static List<Product> ls_HomeShopping = new List<Product>();
         static List<Product> ls_PriceOye = new List<Product>();
         Crawler crawl = new Crawler();
-        public string name { get; set; }
-        public int price { get; set; }
-
+     
         public int Get_Min(List<Product> pro)
         {
             int len = pro.Count;

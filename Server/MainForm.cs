@@ -116,7 +116,7 @@ namespace Map_Reduce
                 Data msgToSend = new Data();
 
                 byte[] message;
-                
+                Client_Info clientInfo = new Client_Info();
 
                 //If the message is to login, logout, or simple text message
                 //then when send to others the type of the message remains the same
@@ -129,7 +129,7 @@ namespace Map_Reduce
 
                         //When a user logs in to the server then we add her to our
                         //list of clients
-                        Client_Info clientInfo = new Client_Info();
+                   
                         if (clientList.Count < 4)
                         {
                             
@@ -153,18 +153,18 @@ namespace Map_Reduce
                                 clientInfo.flag = false;
                                 clientList.Add(clientInfo);
                                 //Set the text of the message that we will broadcast to all users
-                                msgToSend.Message = "<<<" + msgReceived.Name + " has joined the room and Id is" + id + ">>>";
+                                msgToSend.Message = "<<<" + msgReceived.Name + " has joined the room and ID is " + id + ">>>";
                                
 
                             }
-
+                            this.BeginInvoke((MethodInvoker)delegate (){txtLog.Text += msgToSend.Message + "\n"; });
 
                         }
                         else
                         {
                             this.BeginInvoke((MethodInvoker)delegate ()
                             {
-                                // MessageBox.Show("Only 4 clients can be connected");
+                                
                                 txtLog.Text += "Server: Only 4 clients can be connected\n";    
                             });
 
@@ -205,21 +205,33 @@ namespace Map_Reduce
 
                     case Command.Message:
 
+                      
+                      
+
                         //Set the text of the message that we will broadcast to all users
                         msgToSend.Message = msgReceived.Name + ": " + msgReceived.Message;
+                        BeginInvoke((MethodInvoker)delegate () { txtLog.Text += msgToSend.Message +"\n"; });
+                        //saving min price from client
                         foreach (Client_Info client in clientList)
                         {
                             if (client.socket == Current_ClientSocket)
                             {
+                                //makeking flag true of current client to make sure client has sent the min price
                                 client.flag = true;
+
+                                // if client return some valid price means if the price is > 0 so we will ad this 
+                                //price in the list
+                               
                                 if ((int.Parse(msgReceived.Message) > 0))
                                 {
                                     price_List.Add(int.Parse(msgReceived.Message));
 
-                                    pro_list.Add(new Product() {
+                                    pro_list.Add(new Product()
+                                    {
                                         price = int.Parse(msgReceived.Message),
                                         Client_Id = client.id
                                     });
+
                                 }
                                
                             }
@@ -255,21 +267,25 @@ namespace Map_Reduce
                 {
                     message = msgToSend.ConvertToByte();
 
-                    foreach (Client_Info clientInfo in clientList)
+                    foreach (Client_Info client_ in clientList)
                     {
-                        if (clientInfo.socket != Current_ClientSocket || msgToSend.cmd != Command.Login)
+                        if (client_.socket != Current_ClientSocket || msgToSend.cmd != Command.Login)
                         {
                             //Send the message to all users
-                            clientInfo.socket.BeginSend(message, 0, message.Length, SocketFlags.None, new AsyncCallback(Send_Callback), clientInfo.socket);
+                            client_.socket.BeginSend(message, 0, message.Length, SocketFlags.None, new AsyncCallback(Send_Callback), client_.socket);
                         }
                     }
-                    this.BeginInvoke((MethodInvoker)delegate () { txtLog.Text += msgToSend.Message + "\r\n"; });
+
+                   
                     this.BeginInvoke((MethodInvoker)delegate ()
                     {
+                        
                         //below code is for making sure that all client has sent their min price
                         int count = 0;
                         foreach (Client_Info client in clientList)
                         {
+                            //counting how many clients flag
+                            //are true who has sent the min price
                             if (client.flag == true)
                             {
                                 count++;
@@ -277,42 +293,59 @@ namespace Map_Reduce
 
                         }
 
+                        //cheking counted true flags are equal to total clients
                         if (count == clientList.Count)
                         {
                             try
                             {
-                                int minPrice = price_List.Min();
 
-                                txtLog.Text += "count var = " + count + " : list count = " + clientList.Count + " min price = " + minPrice + "\r\n";
+                                btnSearch.Enabled = true;
 
-                                foreach (Product item in pro_list)
+                                if (price_List != null && pro_list != null)
                                 {
-                                    if (item.price == minPrice)
+                                    //getting min price from price sent from all client
+                                    int minPrice = price_List.Min();
+
+                                    txtLog.Text += "Flag Count = " + count + " : Clientlist Count = " + clientList.Count + " Min Price = " + minPrice + "\r\n";
+
+
+                                    //below code for getting the site name which has min price 
+                                    //copying list
+                                    List<Product> Product_list = pro_list.ToList();
+                                    foreach (Product Product in Product_list)
                                     {
-                                        int id = item.Client_Id;
-                                        if (id == 1)
-                                            lblResult.Text = txtInput.Text + " is available at 'PriceOye.pk\n' with lowest price " + minPrice + "Rs.";
-                                        else if (id == 2)
-                                            lblResult.Text = txtInput.Text + " is available at 'IShopping.pk\n' with lowest price " + minPrice + "Rs.";
-                                        else if (id == 3)
-                                            lblResult.Text = txtInput.Text + " is available at 'HomeShopping.pk.pk\n' with lowest price " + minPrice + "Rs.";
-                                        else if (id == 4)
-                                            lblResult.Text = txtInput.Text + " is available at 'ShopBuzz.pk\n' with lowest price " + minPrice + "Rs.";
-                                        break;
+                                        if (Product.price == minPrice)
+                                        {
+                                            int id = Product.Client_Id;
+                                            if (id == 1)
+                                                lblResult.Text = txtInput.Text + " is available at 'PriceOye.pk'\n with lowest price " + minPrice + "Rs.";
+                                            else if (id == 2)
+                                                lblResult.Text = txtInput.Text + " is available at 'IShopping.pk'\n with lowest price " + minPrice + "Rs.";
+                                            else if (id == 3)
+                                                lblResult.Text = txtInput.Text + " is available at 'HomeShopping.pk'\n with lowest price " + minPrice + "Rs.";
+                                            else if (id == 4)
+                                                lblResult.Text = txtInput.Text + " is available at 'ShopBuzz.pk'\n with lowest price " + minPrice + "Rs.";
+                                            break;
+                                        }
                                     }
-                                    price_List.Clear();
-                                    pro_list.Clear();
+                                }
+                                else
+                                {
+                                    lblResult.Text = "Sorry, we cant find min price\n";
                                 }
 
+                                price_List.Clear();
+                                pro_list.Clear();
 
                             }
-                            catch (Exception)
+                            catch (Exception e)
                             {
 
-                                txtLog.Text += "Sorry, We Are Unable To Crawl Data " + "\r\n";
+                                txtLog.Text += "Sorry, We Are Unable To Crawl Data " + "\r\n"+ e.Message.ToString();
 
                             }
 
+                            //making all clients flag false again
                             foreach (Client_Info client in clientList)
                             {
                                 client.flag = false;
@@ -355,6 +388,7 @@ namespace Map_Reduce
         {
             try
             {
+                btnSearch.Enabled = false;
                 lblResult.Text = "Wait....";
                 //Fill the info for the message to be send
                 Data msgSnd = new Data();
@@ -394,8 +428,7 @@ namespace Map_Reduce
                 msgSnd.Message = "ServerLogOut";
 
 
-                //Send it to the all clients for logging Out
-
+                //Send it to the all clients for logging Out             
                 foreach (Client_Info clientInfo in clientList)
                 {
 
@@ -420,12 +453,15 @@ namespace Map_Reduce
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //if close button is clicked
+            //we will close the form
             if (FormCloseFlag)
             {
                 e.Cancel = false;
             }
             else
             {
+                //else preventing form from closing 
                 e.Cancel = true;
             }
            
