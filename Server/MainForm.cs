@@ -36,6 +36,7 @@ namespace Map_Reduce
 
         //this queue is for logout client's ids
         Queue<int> id_List = new Queue<int>();
+
         //we we will add min price from each website in this list
         List<int> price_List = new List<int>();
 
@@ -296,6 +297,11 @@ namespace Map_Reduce
                         //cheking counted true flags are equal to total clients
                         if (count == clientList.Count)
                         {
+                            pictureBox1.Image = null;
+                            pictureBox1.ImageLocation = @"searchImg.png";
+                            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+
+                            pictureBox2.Hide();
                             try
                             {
 
@@ -386,10 +392,17 @@ namespace Map_Reduce
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            pictureBox1.Image = null;
+            pictureBox1.ImageLocation = @"search.gif";
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+
+            pictureBox2.Show();
+            pictureBox2.ImageLocation = @"loading.gif";
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
             try
             {
                 btnSearch.Enabled = false;
-                lblResult.Text = "Wait....";
+                //lblResult.Text = "Wait....";
                 //Fill the info for the message to be send
                 Data msgSnd = new Data();
 
@@ -419,6 +432,7 @@ namespace Map_Reduce
         private void btnClose_Click(object sender, EventArgs e)
         {
            
+
             try
             {
                

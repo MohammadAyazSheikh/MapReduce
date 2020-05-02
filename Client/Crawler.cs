@@ -11,7 +11,7 @@ namespace Client
 {
     class Crawler
     {
-        ChromeDriver driver;
+        ChromeDriver Chrome_Driver;
         
 
 
@@ -21,7 +21,7 @@ namespace Client
            
             IList<IWebElement> desc_list;
             IList<IWebElement> price_list;
-            driver = new ChromeDriver();
+            Chrome_Driver = new ChromeDriver();
             List<Product> info = new List<Product>();
            
             
@@ -29,17 +29,17 @@ namespace Client
             Thread.Sleep(5000);
             try
             {
-                driver.Navigate().GoToUrl("https://www.ishopping.pk/");
+                Chrome_Driver.Navigate().GoToUrl("https://www.ishopping.pk/");
                 Thread.Sleep(3000);
-                var searchBar = driver.FindElementByXPath("//input[@id = 'search']");
+                var searchBar = Chrome_Driver.FindElementByXPath("//input[@id = 'search']");
                 searchBar.SendKeys(Input);
                
-                var searchBtn = driver.FindElementByXPath("//button[@type = 'submit'][@title = 'Search']");
+                var searchBtn = Chrome_Driver.FindElementByXPath("//button[@type = 'submit'][@title = 'Search']");
                 //Thread.Sleep(2000);
                 searchBtn.Click();
                 Thread.Sleep(3000);
-                desc_list = driver.FindElements(By.XPath("//div[@class= 'kuNameDesc']/div[@class ='kuName']"));
-                price_list = driver.FindElements(By.XPath("//div[@class ='kuPrice']/div[@class = 'kuSalePrice']"));
+                desc_list = Chrome_Driver.FindElements(By.XPath("//div[@class= 'kuNameDesc']/div[@class ='kuName']"));
+                price_list = Chrome_Driver.FindElements(By.XPath("//div[@class ='kuPrice']/div[@class = 'kuSalePrice']"));
 
                 if (desc_list.Count > 0 && price_list.Count > 0)
                 {
@@ -50,6 +50,7 @@ namespace Client
                         {
                             string desc = desc_list[i].Text;
                             string price = price_list[i].Text;
+
                             price = price.Replace("PKR",string.Empty).Replace(",", String.Empty);
 
                             info.Add(new Product()
@@ -72,30 +73,30 @@ namespace Client
             }
           
           
-            driver.Close();
-            driver.Quit();
+            Chrome_Driver.Close();
+            Chrome_Driver.Quit();
             return info;
         }
 
 
         public List<Product> GetData_HomeShopping(string Input)
         {
-            driver = new ChromeDriver();
+            Chrome_Driver = new ChromeDriver();
             List<Product> info = new List<Product>();
 
 
             try
             {
-                driver.Navigate().GoToUrl("https://homeshopping.pk/");
-                var searchBar = driver.FindElementByXPath("//input[@class = 'form-control bordr searchbar'][@placeholder = 'What are you looking for ?']");
+                Chrome_Driver.Navigate().GoToUrl("https://homeshopping.pk/");
+                var searchBar = Chrome_Driver.FindElementByXPath("//input[@class = 'form-control bordr searchbar'][@placeholder = 'What are you looking for ?']");
                 Thread.Sleep(1000);
                 searchBar.SendKeys(Input);
-                var searchBtn = driver.FindElementByXPath("//button[@class = 'btn  btn-success searhicon searchbtv']");
+                var searchBtn = Chrome_Driver.FindElementByXPath("//button[@class = 'btn  btn-success searhicon searchbtv']");
                 Thread.Sleep(1000);
                 searchBtn.Click();
                 Thread.Sleep(3000);
-                IList<IWebElement> desc_list = driver.FindElements(By.XPath("//span[@class = 'findify-components--text findify-components--cards--product__title']"));
-                IList<IWebElement> price_list = driver.FindElements(By.XPath("//span[@class = 'price findify-components--cards--product--price__price']"));
+                IList<IWebElement> desc_list = Chrome_Driver.FindElements(By.XPath("//span[@class = 'findify-components--text findify-components--cards--product__title']"));
+                IList<IWebElement> price_list = Chrome_Driver.FindElements(By.XPath("//span[@class = 'price findify-components--cards--product--price__price']"));
                 if (desc_list.Count > 0 && price_list.Count > 0)
                 {
                     for (int i = 0; i < desc_list.Count; i++)
@@ -123,29 +124,29 @@ namespace Client
                 });
             }
 
-            driver.Close();
-            driver.Quit();
+            Chrome_Driver.Close();
+            Chrome_Driver.Quit();
             return info;
         }
 
 
         public List<Product> GetData_Shopbuzz(string Input)
         {
-            driver = new ChromeDriver();
+            Chrome_Driver = new ChromeDriver();
             List<Product> info = new List<Product>();
           
 
             try
             {
-                driver.Navigate().GoToUrl("http://www.shopbuzz.pk/");
-                var searchBar = driver.FindElementByXPath("//input[@class = 'search-query input-medium ui-autocomplete-input']");
+                Chrome_Driver.Navigate().GoToUrl("http://www.shopbuzz.pk/");
+                var searchBar = Chrome_Driver.FindElementByXPath("//input[@class = 'search-query input-medium ui-autocomplete-input']");
                 searchBar.SendKeys(Input);
                 Thread.Sleep(3000);
-                var searchBar_li = driver.FindElement(By.XPath("//li[@class = 'ui-menu-item']"));
+                var searchBar_li = Chrome_Driver.FindElement(By.XPath("//li[@class = 'ui-menu-item']"));
                 string desc = searchBar_li.Text;
                 searchBar_li.Click();
 
-                IList<IWebElement> price_list = driver.FindElements(By.XPath("//div[@id = 'used-phone-grid']/table/tbody/tr/td[8]"));
+                IList<IWebElement> price_list = Chrome_Driver.FindElements(By.XPath("//div[@id = 'used-phone-grid']/table/tbody/tr/td[8]"));
                 if (price_list.Count > 0)
                 {
                     for (int i = 0; i < price_list.Count; i++)
@@ -175,27 +176,27 @@ namespace Client
                 });
             }
 
-            driver.Close();
-            driver.Quit();
+            Chrome_Driver.Close();
+            Chrome_Driver.Quit();
             return info;
         }
 
         public List<Product> GetData_PriceOye(string Input)
         {
-            driver = new ChromeDriver();
+            Chrome_Driver = new ChromeDriver();
             List<Product> info = new List<Product>();
 
             try
             {
-                driver.Navigate().GoToUrl("https://priceoye.pk/");
+                Chrome_Driver.Navigate().GoToUrl("https://priceoye.pk/");
                 Thread.Sleep(3000);
-                var searchBar = driver.FindElementByXPath("//div[@class = 'po-search-box']/form/fieldset/input[@id = 'search-term']");
+                var searchBar = Chrome_Driver.FindElementByXPath("//div[@class = 'po-search-box']/form/fieldset/input[@id = 'search-term']");
                 searchBar.SendKeys(Input);
                 Thread.Sleep(3000);
                 searchBar.Submit();
                 Thread.Sleep(2000);
                 //IList<IWebElement> name_list = driver.FindElementsByXPath("  //div[@class  = 'product-list']/div[@class = 'productBox']/a/div[@class = 'detail-box']/h4");
-                IList<IWebElement> price_list = driver.FindElements(By.XPath("//div[@class  = 'product-list']/div[@class = 'productBox']/a/div[@class = 'detail-box']/div[@class='price-box']"));
+                IList<IWebElement> price_list = Chrome_Driver.FindElements(By.XPath("//div[@class  = 'product-list']/div[@class = 'productBox']/a/div[@class = 'detail-box']/div[@class='price-box']"));
                 if (price_list.Count > 0)
                 {
                     for (int i = 0; i < price_list.Count; i++)
@@ -225,8 +226,8 @@ namespace Client
                 });
             }
 
-            driver.Close();
-            driver.Quit();
+            Chrome_Driver.Close();
+            Chrome_Driver.Quit();
 
             return info;
         }

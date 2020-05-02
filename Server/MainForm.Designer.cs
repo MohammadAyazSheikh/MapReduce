@@ -37,7 +37,9 @@
             this.lblResult = new System.Windows.Forms.Label();
             this.txtLog = new System.Windows.Forms.RichTextBox();
             this.btnClose = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // txtInput
@@ -61,11 +63,11 @@
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnSearch.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSearch.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnSearch.Location = new System.Drawing.Point(324, 190);
+            this.btnSearch.Location = new System.Drawing.Point(327, 179);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(146, 39);
             this.btnSearch.TabIndex = 4;
-            this.btnSearch.Text = "CLICK ME";
+            this.btnSearch.Text = "Find";
             this.btnSearch.UseVisualStyleBackColor = false;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
@@ -77,9 +79,9 @@
             this.lblStats.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.lblStats.Location = new System.Drawing.Point(12, 235);
             this.lblStats.Name = "lblStats";
-            this.lblStats.Size = new System.Drawing.Size(114, 36);
+            this.lblStats.Size = new System.Drawing.Size(132, 36);
             this.lblStats.TabIndex = 5;
-            this.lblStats.Text = "Stats :  ";
+            this.lblStats.Text = "Status :  ";
             // 
             // lblicon
             // 
@@ -96,11 +98,12 @@
             // pictureBox1
             // 
             this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(197, 22);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(109, 107);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 7;
             this.pictureBox1.TabStop = false;
             // 
@@ -110,7 +113,7 @@
             this.lblResult.BackColor = System.Drawing.Color.Transparent;
             this.lblResult.Font = new System.Drawing.Font("Microsoft YaHei UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblResult.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lblResult.Location = new System.Drawing.Point(105, 240);
+            this.lblResult.Location = new System.Drawing.Point(121, 244);
             this.lblResult.Name = "lblResult";
             this.lblResult.Size = new System.Drawing.Size(17, 26);
             this.lblResult.TabIndex = 8;
@@ -121,9 +124,9 @@
             this.txtLog.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.txtLog.Font = new System.Drawing.Font("Microsoft YaHei UI", 11.25F, System.Drawing.FontStyle.Bold);
             this.txtLog.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.txtLog.Location = new System.Drawing.Point(12, 294);
+            this.txtLog.Location = new System.Drawing.Point(12, 321);
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(767, 150);
+            this.txtLog.Size = new System.Drawing.Size(767, 123);
             this.txtLog.TabIndex = 9;
             this.txtLog.Text = "";
             // 
@@ -133,14 +136,24 @@
             this.btnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnClose.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClose.ForeColor = System.Drawing.SystemColors.ButtonShadow;
+            this.btnClose.ForeColor = System.Drawing.Color.Salmon;
             this.btnClose.Location = new System.Drawing.Point(12, 12);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(84, 39);
+            this.btnClose.Size = new System.Drawing.Size(37, 34);
             this.btnClose.TabIndex = 11;
-            this.btnClose.Text = "Close";
+            this.btnClose.Text = "X";
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.Location = new System.Drawing.Point(351, 220);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(100, 100);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 12;
+            this.pictureBox2.TabStop = false;
             // 
             // MainForm
             // 
@@ -149,6 +162,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(791, 456);
+            this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.lblResult);
@@ -157,6 +171,7 @@
             this.Controls.Add(this.lblStats);
             this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.txtInput);
+            this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -166,6 +181,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,6 +196,7 @@
         private System.Windows.Forms.Label lblResult;
         private System.Windows.Forms.RichTextBox txtLog;
         private System.Windows.Forms.Button btnClose;
+        private System.Windows.Forms.PictureBox pictureBox2;
     }
 }
 

@@ -44,7 +44,7 @@
             this.lstChatters.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lstChatters.FormattingEnabled = true;
             this.lstChatters.ItemHeight = 22;
-            this.lstChatters.Location = new System.Drawing.Point(448, 48);
+            this.lstChatters.Location = new System.Drawing.Point(448, 85);
             this.lstChatters.Name = "lstChatters";
             this.lstChatters.Size = new System.Drawing.Size(103, 264);
             this.lstChatters.TabIndex = 8;
@@ -55,7 +55,7 @@
             this.lblStats.BackColor = System.Drawing.Color.Transparent;
             this.lblStats.Font = new System.Drawing.Font("Microsoft YaHei UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStats.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.lblStats.Location = new System.Drawing.Point(10, 11);
+            this.lblStats.Location = new System.Drawing.Point(10, 48);
             this.lblStats.Name = "lblStats";
             this.lblStats.Size = new System.Drawing.Size(373, 36);
             this.lblStats.TabIndex = 11;
@@ -67,7 +67,7 @@
             this.label2.BackColor = System.Drawing.Color.Transparent;
             this.label2.Font = new System.Drawing.Font("Microsoft YaHei UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label2.Location = new System.Drawing.Point(436, 11);
+            this.label2.Location = new System.Drawing.Point(436, 48);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(125, 26);
             this.label2.TabIndex = 12;
@@ -77,12 +77,12 @@
             // 
             this.btn_Logout.BackColor = System.Drawing.SystemColors.GrayText;
             this.btn_Logout.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold);
-            this.btn_Logout.ForeColor = System.Drawing.Color.White;
-            this.btn_Logout.Location = new System.Drawing.Point(448, 316);
+            this.btn_Logout.ForeColor = System.Drawing.Color.Salmon;
+            this.btn_Logout.Location = new System.Drawing.Point(12, 8);
             this.btn_Logout.Name = "btn_Logout";
-            this.btn_Logout.Size = new System.Drawing.Size(103, 45);
+            this.btn_Logout.Size = new System.Drawing.Size(44, 37);
             this.btn_Logout.TabIndex = 13;
-            this.btn_Logout.Text = "Cancel";
+            this.btn_Logout.Text = "X";
             this.btn_Logout.UseVisualStyleBackColor = false;
             this.btn_Logout.Click += new System.EventHandler(this.btn_Logout_Click);
             // 
@@ -91,7 +91,7 @@
             this.txtChatBox.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.txtChatBox.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Bold);
             this.txtChatBox.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.txtChatBox.Location = new System.Drawing.Point(12, 48);
+            this.txtChatBox.Location = new System.Drawing.Point(12, 85);
             this.txtChatBox.Name = "txtChatBox";
             this.txtChatBox.Size = new System.Drawing.Size(400, 264);
             this.txtChatBox.TabIndex = 14;
